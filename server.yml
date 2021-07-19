@@ -1,0 +1,13 @@
+{
+  'apps':
+    [
+      {
+        name: 'push-server',
+        script: './app.js',
+        instances: 1,
+        max_memory_restart: '2000M',
+        exec_mode: 'cluster',
+        watch: true,
+      },
+    ],
+}
