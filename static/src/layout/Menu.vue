@@ -2,14 +2,14 @@
  * @Author: 杨宏旋
  * @Date: 2021-05-12 10:48:11
  * @LastEditors: yanghongxuan
- * @LastEditTime: 2021-12-23 14:32:04
+ * @LastEditTime: 2021-12-23 15:02:23
  * @Description:
 -->
 <template>
   <div class="com_side">
     <div class="list" id="side-main-nav">
       <a href="/web/home">
-        <li class="item" data-mark="home">
+        <li class="item active" data-mark="home">
           <span class="iconfont">&#xe625;</span>
           <span class="title">数据分析</span>
         </li>
@@ -38,7 +38,7 @@
           <span class="title">脚本错误</span>
         </li>
       </a>
-      <a href="/web/pagesavg?type=2&slowpages">
+      <a href="/web/pagesavg">
         <li class="item" data-mark="slowpages">
           <span class="iconfont">&#xe744;</span>
           <span class="title">慢页面追踪</span>

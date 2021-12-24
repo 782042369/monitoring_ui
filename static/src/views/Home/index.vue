@@ -2,11 +2,11 @@
  * @Author: yanghongxuan
  * @Date: 2021-12-23 10:57:40
  * @LastEditors: yanghongxuan
- * @LastEditTime: 2021-12-23 14:31:11
+ * @LastEditTime: 2021-12-23 17:16:37
  * @Description:
 -->
 <template>
-  <div class="com_content_body main pb100" id="vue_id" v-cloak>
+  <div class="com_content_body main" id="vue_id" v-cloak>
     <h1 class="com_h1">数据分析</h1>
     <div class="com_slide_tab_x mt30 mb30">
       <div class="item" :class="{ 'active': STATE.lable == 1 }" @click="checkoutLabel(1)">概况</div>
@@ -14,7 +14,7 @@
         class="item"
         :class="{ 'active': STATE.lable == 2 }"
         @click="checkoutLabel(2)"
-      >PV | AJAX | UV | IP | FLOW</div>
+      >PV | 请求 | UV | IP | FLOW</div>
     </div>
     <div v-show="STATE.lable == 1">
       <div class="com_topic mb20">
@@ -41,7 +41,7 @@
             {{ STATE.surveyone.ip }}
           </div>
           <div class="com ip">
-            <span>AJAX:</span>
+            <span>请求:</span>
             {{ STATE.surveyone.ajax }}
           </div>
           <div class="com ip">
@@ -74,7 +74,7 @@
             {{ STATE.today.ip }}
           </div>
           <div class="com ip">
-            <span>AJAX:</span>
+            <span>请求:</span>
             {{ STATE.today.ajax }}
           </div>
           <div class="com ip">
@@ -100,7 +100,7 @@
               {{ item.ip }}
             </div>
             <div class="com ip">
-              <span>AJAX:</span>
+              <span>请求:</span>
               {{ item.ajax }}
             </div>
             <div class="com ip">
@@ -133,11 +133,11 @@
         />
         <div class="tipscolor mt10" v-if="STATE.errText">{{ STATE.errText }}</div>
       </div>
-      <div class="com_block">
+      <div class="com_block mt20">
         <h1 class="com_h2 mb20">实时访问AJAX</h1>
         <div id="pvuvip_ajax" style="height:400px"></div>
       </div>
-      <div class="com_block">
+      <div class="com_block mt20">
         <h1 class="com_h2 mb20">实时访问PV</h1>
         <div id="pvuvip_pv" style="height:400px"></div>
       </div>
@@ -249,7 +249,7 @@ const checkoutLabel = (lable) => {
     getPvUvIpList();
   };
 }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </script>
+</script>
 <style scoped lang='scss'>
 .com_block {
   padding-bottom: 10px;

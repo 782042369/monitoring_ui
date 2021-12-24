@@ -2,7 +2,7 @@
  * @Author: 杨宏旋
  * @Date: 2021-05-07 14:51:42
  * @LastEditors: yanghongxuan
- * @LastEditTime: 2021-12-23 14:15:16
+ * @LastEditTime: 2021-12-23 15:05:11
  * @Description:
 -->
 <template>
@@ -34,7 +34,6 @@ import Menu from './Menu.vue'
   &-content {
     flex: 1;
     margin: 20px;
-    padding: 20px;
     overflow: auto;
     height: calc(100vh - 64px - 40px);
   }
