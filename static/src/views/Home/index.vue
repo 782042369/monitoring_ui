@@ -2,7 +2,7 @@
  * @Author: yanghongxuan
  * @Date: 2021-12-23 10:57:40
  * @LastEditors: yanghongxuan
- * @LastEditTime: 2021-12-30 09:26:06
+ * @LastEditTime: 2021-12-30 10:21:57
  * @Description:
 -->
 <template>
@@ -267,7 +267,7 @@ const handleGetPvUvIpOne = async () => {
     appId: 'zZQpe1627352687237',
   })
   let datas = data.data;
-  let time = dayjs(datas.time).format('mm');
+  let time = dayjs(data.time).format('mm');
   // 动态数据接口 addData
   STATE.xAxislist.shift();
   STATE.itemlist1.shift();
@@ -339,7 +339,6 @@ const checkoutLabel = (lable: number) => {
 
   if (lable == 1) {
     clearInterval(STATE.timer)
-    console.log(111);
     handleGetWebPvUvIpByDay();
     // getHistoryPvUvIplist();
   } else if (lable == 2) {
@@ -449,7 +448,6 @@ const handleDraw = (type: string, xAxislist: string[], itemlist: number[]) => {
     STATE.myChartIP.setOption(option);
   } else if (type == 'AJAX') {
     STATE.myChartAJAX.setOption(option);
-    console.log('option: ', option);
   } else if (type == 'FLOW') {
     STATE.myChartFLOW.setOption(option);
   }
