@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>vue页面性能监控</title>
-    <script src="../lib/index.js"></script>
+    <script src="./index.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.14/vue.min.js"></script>
     <script>
       new MonitorJS().init({
@@ -21,7 +21,7 @@
         isPage: true,
         vueError: true, //是否上报Vue错误
         vue: Vue,
-        userID: '2',
+        userID: '2'
       })
     </script>
     <link rel="stylesheet" href="./style.css" />
@@ -58,7 +58,7 @@
     data: {
       message: '--------------------------------',
       src3: 'https://pic.xiaohuochai.site/blog/chromePerformance2_error.png',
-      src4: '',
+      src4: ''
     },
     created() {
       this.func1().then((ret) => {
@@ -84,7 +84,7 @@
       },
       func2() {
         ss()
-      },
-    },
+      }
+    }
   })
 </script>
