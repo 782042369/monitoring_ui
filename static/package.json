@@ -7,6 +7,7 @@
     "build": "vite build && esno ./build/script/postBuild.ts"
   },
   "dependencies": {
+    "echarts": "^5.2.2",
     "vue": "^3.1.5",
     "vue-router": "^4.0.10"
   },
@@ -21,7 +22,7 @@
     "ant-design-vue": "^2.1.3",
     "axios": "^0.21.1",
     "cross-env": "^7.0.3",
-    "dayjs": "^1.10.6",
+    "dayjs": "^1.10.7",
     "dotenv": "^9.0.2",
     "eslint": "^7.31.0",
     "eslint-config-prettier": "^8.3.0",

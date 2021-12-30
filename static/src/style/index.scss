@@ -16,11 +16,6 @@
   src: local('Montserrat Regular'), local('Montserrat-Regular'),
     url('../font/JTUSjIg1_i6t8kCHKm459WlhzQ.woff') format('woff');
 }
-body {
-  background: #f9fafb;
-  font-family: 'Montserrat', sans-serif, '微软雅黑';
-  position: relative;
-}
 [v-cloak] {
   display: none;
 }
@@ -583,4 +578,7 @@ table.table tr td {
 }
 .block-time .top-width {
   width: 100% !important;
+}
+#app {
+  background: #f9fafb;
 }

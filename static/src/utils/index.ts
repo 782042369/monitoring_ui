@@ -1,8 +1,8 @@
 /*
  * @Author: 杨宏旋
  * @Date: 2021-05-13 14:44:32
- * @LastEditors: 杨宏旋
- * @LastEditTime: 2021-05-13 14:44:51
+ * @LastEditors: yanghongxuan
+ * @LastEditTime: 2021-12-29 14:56:04
  * @Description:
  */
 import type { RouteLocationNormalized, RouteRecordNormalized } from 'vue-router'
@@ -88,8 +88,8 @@ export function getRawRoute(
       ? matched.map((item) => ({
           meta: item.meta,
           name: item.name,
-          path: item.path,
+          path: item.path
         }))
-      : undefined) as RouteRecordNormalized[],
+      : undefined) as RouteRecordNormalized[]
   }
 }

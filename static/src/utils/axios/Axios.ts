@@ -77,7 +77,7 @@ export class VAxios {
       requestInterceptors,
       requestInterceptorsCatch,
       responseInterceptors,
-      responseInterceptorsCatch,
+      responseInterceptorsCatch
     } = transform
 
     const axiosCanceler = new AxiosCanceler()
@@ -87,7 +87,7 @@ export class VAxios {
       (config: AxiosRequestConfig) => {
         // If cancel repeat request is turned on, then cancel repeat request is prohibited
         const {
-          headers: { ignoreCancelToken },
+          headers: { ignoreCancelToken }
         } = config
 
         const ignoreCancel =
@@ -159,8 +159,8 @@ export class VAxios {
       data: formData,
       headers: {
         'Content-type': ContentTypeEnum.FORM_DATA,
-        ignoreCancelToken: true,
-      },
+        ignoreCancelToken: true
+      }
     })
   }
 
@@ -179,7 +179,7 @@ export class VAxios {
 
     return {
       ...config,
-      data: qs.stringify(config.data, { arrayFormat: 'brackets' }),
+      data: qs.stringify(config.data, { arrayFormat: 'brackets' })
     }
   }
 
@@ -194,7 +194,7 @@ export class VAxios {
     config: AxiosRequestConfig,
     options?: RequestOptions
   ): Promise<T> {
-    return this.request({ ...config, method: 'POST' }, options)
+    return this.request<T>({ ...config, method: 'POST' }, options)
   }
 
   put<T = any>(
@@ -237,11 +237,11 @@ export class VAxios {
           if (transformRequestHook && isFunction(transformRequestHook)) {
             const ret = transformRequestHook(res, opt)
             ret !== errorResult
-              ? resolve(ret)
+              ? resolve(ret.data)
               : reject(new Error('request error!'))
             return
           }
-          resolve(res as unknown as Promise<T>)
+          resolve(res.data as unknown as Promise<T>)
         })
         .catch((e: Error) => {
           if (requestCatchHook && isFunction(requestCatchHook)) {

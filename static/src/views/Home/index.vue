@@ -2,7 +2,7 @@
  * @Author: yanghongxuan
  * @Date: 2021-12-23 10:57:40
  * @LastEditors: yanghongxuan
- * @LastEditTime: 2021-12-23 17:16:37
+ * @LastEditTime: 2021-12-30 09:26:06
  * @Description:
 -->
 <template>
@@ -19,13 +19,12 @@
     <div v-show="STATE.lable == 1">
       <div class="com_topic mb20">
         <span class="iconfont">&#xe63a;</span>
-        实时概况处理同步有{{ STATE.timebetween }}分钟以内的延迟，每{{ STATE.timebetween }}分钟自动更新一次。
+        实时概况处理同步有{{ STATE.timebetween }}分钟以内的延迟，每{{ STATE.timebetween }}分钟自动更新一次。流量统计以（M）为单位。
       </div>
       <div class="com_block mt20">
         <h1 class="com_h2 mb20">查询某日概况</h1>
         <div class="search mb20">
           <input id="zane-calendar-1" class="inp" type="text" placeholder="点击选择日期" />
-          <div class="tipscolor mt10" v-if="STATE.errTextleft">{{ STATE.errTextleft }}</div>
         </div>
         <div class="survey" v-if="STATE.surveyone.app_id">
           <div class="com pv">
@@ -157,12 +156,15 @@
   </div>
 </template>
 <script lang='ts' setup>
-import { reactive } from 'vue'
+import { getWebPvUvIpByDay, getWebPvUvIpSituation, getPvUvIpList, getPvUvIpOne } from '@/api/uvpv'
+import { onMounted, reactive, nextTick } from 'vue'
+import dayjs from 'dayjs'
+import * as echarts from 'echarts'
+
 const STATE = reactive<{
   lable: number;
   beginTime: string;
   endTime: string;
-  timer: null;
   appId: string;
   datalist: never[];
   today: {
@@ -170,7 +172,7 @@ const STATE = reactive<{
     uv: number
     ip: number
     ajax: number
-    flow: number
+    flow: string
   };
   surveyone: {
     app_id?: string
@@ -178,7 +180,7 @@ const STATE = reactive<{
     uv: number
     ip: number
     ajax: number
-    flow: number
+    flow: string
     bounce: string
     depth: number
   };
@@ -190,17 +192,29 @@ const STATE = reactive<{
     uv: number
     ip: number
     ajax: number
-    flow: number
+    flow: string
     bounce: string
     depth: number
   }[];
   timebetween: number;
   searchbetween: number;
+  xAxislist: string[],
+  itemlist1: number[],
+  itemlist2: number[],
+  itemlist3: number[],
+  itemlist4: number[],
+  itemlist5: number[],
+  myChartPV: any,
+  myChartUV: any,
+  myChartIP: any,
+  myChartAJAX: any,
+  myChartFLOW: any,
+  timer: number
 }>({
   lable: 1, //1:概况 2：pv|uv|ip
   beginTime: '',
   endTime: '',
-  timer: null,
+  timer: 0,
   appId: '',
   datalist: [],
   today: {
@@ -208,7 +222,7 @@ const STATE = reactive<{
     uv: 0,
     ip: 0,
     ajax: 0,
-    flow: 0
+    flow: '0 B'
   },
   surveyone: {
     pv: 0,
@@ -217,38 +231,233 @@ const STATE = reactive<{
     ajax: 0,
     depth: 0,
     bounce: '0%',
-    flow: 0,
+    flow: '0 B',
 
   },
   errText: '',
   errTextleft: '',
   historylist: [],
-  timebetween: 1,
-  searchbetween: 1,
+  timebetween: 2, // 数据库corn解析出来的时间
+  searchbetween: 1, // 实时数据粒度按使维度
+  xAxislist: [],
+  itemlist1: [],
+  itemlist2: [],
+  itemlist3: [],
+  itemlist4: [],
+  itemlist5: [],
+  myChartPV: null,
+  myChartUV: null,
+  myChartIP: null,
+  myChartAJAX: null,
+  myChartFLOW: null
 })
-const getPvUvIpSurvey = () => {
 
+// 获取时间段内数据
+const handleGetWebPvUvIpByDay = async () => {
+  const data = await getWebPvUvIpByDay({
+    appId: 'zZQpe1627352687237',
+    beginTime: dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss'),
+    endTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
+  })
+  STATE.today = data
 }
-const getHistoryPvUvIplist = () => {
+// 获取图表最新一次定时任务数据
+const handleGetPvUvIpOne = async () => {
+  const data = await getPvUvIpOne({
+    appId: 'zZQpe1627352687237',
+  })
+  let datas = data.data;
+  let time = dayjs(datas.time).format('mm');
+  // 动态数据接口 addData
+  STATE.xAxislist.shift();
+  STATE.itemlist1.shift();
+  STATE.itemlist2.shift();
+  STATE.itemlist3.shift();
+  STATE.itemlist4.shift();
+  STATE.itemlist5.shift();
 
+  STATE.xAxislist.push(time);
+  STATE.itemlist1.push(datas.pv || 0)
+  STATE.itemlist2.push(datas.uv || 0)
+  STATE.itemlist3.push(datas.ip || 0)
+  STATE.itemlist4.push(datas.ajax || 0)
+  STATE.itemlist5.push(datas.flow || 0)
+
+  STATE.myChartPV.setOption({ series: [{ data: STATE.itemlist1 }] });
+  STATE.myChartUV.setOption({ series: [{ data: STATE.itemlist2 }] });
+  STATE.myChartIP.setOption({ series: [{ data: STATE.itemlist3 }] });
+  STATE.myChartAJAX.setOption({ series: [{ data: STATE.itemlist4 }] });
+  STATE.myChartFLOW.setOption({ series: [{ data: STATE.itemlist5 }] });
 }
-const getPvUvIpList = () => {
-
+// 获取多个维度时段数据
+const handleGetPvUvIpList = async () => {
+  const data = await getPvUvIpList({
+    appId: 'zZQpe1627352687237',
+    beginTime: dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss'),
+    endTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
+  })
+  STATE.xAxislist = [];
+  STATE.itemlist1 = [];
+  STATE.itemlist2 = [];
+  STATE.itemlist3 = [];
+  STATE.itemlist4 = [];
+  STATE.itemlist5 = [];
+  data.data.forEach(item => {
+    let time = dayjs(item.time).format('HH:mm');
+    STATE.xAxislist.push(time);
+    STATE.itemlist1.push(item.pv)
+    STATE.itemlist2.push(item.uv)
+    STATE.itemlist3.push(item.ip)
+    STATE.itemlist4.push(item.ajax)
+    STATE.itemlist5.push(item.flow)
+  });
+  nextTick(() => {
+    handleDraw('PV', STATE.xAxislist, STATE.itemlist1);
+    handleDraw('UV', STATE.xAxislist, STATE.itemlist2);
+    handleDraw('IP', STATE.xAxislist, STATE.itemlist3);
+    handleDraw('AJAX', STATE.xAxislist, STATE.itemlist4);
+    handleDraw('FLOW', STATE.xAxislist, STATE.itemlist5);
+  })
+  STATE.timer = setInterval(() => {
+    handleGetPvUvIpOne()
+  }, data.time) as unknown as number
 }
-
-const checkoutLabel = (lable) => {
+// 获取定时任务时段 实时概况处理
+const handleGetWebPvUvIpSituation = async () => {
+  const data = await getWebPvUvIpSituation({
+    appId: 'zZQpe1627352687237',
+  })
+  STATE.timebetween = data.time / 1000 / 60
+  STATE.searchbetween = data.time * 30 / 1000 / 60 / 60;
+}
+// 切换label
+const checkoutLabel = (lable: number) => {
   if (lable === STATE.lable) return;
   STATE.lable = lable;
   STATE.beginTime = '';
   STATE.endTime = '';
 
   if (lable == 1) {
-    getPvUvIpSurvey();
-    getHistoryPvUvIplist();
+    clearInterval(STATE.timer)
+    console.log(111);
+    handleGetWebPvUvIpByDay();
+    // getHistoryPvUvIplist();
   } else if (lable == 2) {
-    getPvUvIpList();
+    handleGetPvUvIpList();
   };
 }
+const handleDraw = (type: string, xAxislist: string[], itemlist: number[]) => {
+  // 基于准备好的dom，初始化echarts图表
+  let color = '';
+  if (type == 'PV') {
+    STATE.myChartPV = echarts.init(document.getElementById('pvuvip_pv') as HTMLElement);
+    color = '#42aaff'
+  } else if (type == 'UV') {
+    STATE.myChartUV = echarts.init(document.getElementById('pvuvip_uv') as HTMLElement);
+    color = '#58d17e'
+  } else if (type == 'IP') {
+    STATE.myChartIP = echarts.init(document.getElementById('pvuvip_ip') as HTMLElement);
+    color = '#f46d85'
+  } else if (type == 'AJAX') {
+    STATE.myChartAJAX = echarts.init(document.getElementById('pvuvip_ajax') as HTMLElement);
+    color = '#8776f7'
+  } else if (type == 'FLOW') {
+    STATE.myChartFLOW = echarts.init(document.getElementById('pvuvip_flow') as HTMLElement);
+    color = '#8776f7'
+  }
+  const option = {
+    legend: {
+      data: [type]
+    },
+    tooltip: {
+      trigger: 'item',
+      formatter: "{a} <br/>{b} : {c} "
+    },
+    color: [color],
+    toolbox: {
+      show: false,
+      feature: {
+        mark: { show: true },
+        magicType: { show: true, type: ['line', 'bar', 'stack', 'tiled'] },
+        restore: { show: true },
+        saveAsImage: { show: false }
+      }
+    },
+    grid: {
+      borderWidth: 0,
+    },
+    xAxis: [
+      {
+        type: 'category',
+        data: xAxislist,
+        splitLine: {
+          show: false,
+        },
+        axisTick: {
+          show: true,
+          lineStyle: {
+            color: '#eee',
+          }
+        },
+        axisLabel: {
+          show: true,
+          textStyle: {
+            color: '#B7B7B7',
+            fontSize: 10,
+          },
+        },
+      }
+    ],
+    yAxis: [
+      {
+        type: 'value',
+        axisLabel: {
+          show: true,
+          textStyle: {
+            color: '#B7B7B7',
+          }
+        },
+        splitLine: {
+          show: true,
+          lineStyle: {
+            type: 'dashed',
+            color: '#eee',
+            width: 1,
+          }
+        },
+        axisLine: {
+          show: false,
+        },
+      }
+    ],
+    series: [
+      {
+        name: type,
+        type: 'line',
+        smooth: true,
+        itemStyle: { normal: { areaStyle: { type: 'default' } } },
+        data: itemlist
+      },
+    ]
+  };
+  // 为echarts对象加载数据
+  if (type == 'PV') {
+    STATE.myChartPV.setOption(option);
+  } else if (type == 'UV') {
+    STATE.myChartUV.setOption(option);
+  } else if (type == 'IP') {
+    STATE.myChartIP.setOption(option);
+  } else if (type == 'AJAX') {
+    STATE.myChartAJAX.setOption(option);
+    console.log('option: ', option);
+  } else if (type == 'FLOW') {
+    STATE.myChartFLOW.setOption(option);
+  }
+}
+onMounted(() => {
+  handleGetWebPvUvIpByDay();
+  handleGetWebPvUvIpSituation()
+})
 </script>
 <style scoped lang='scss'>
 .com_block {
