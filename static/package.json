@@ -2,8 +2,8 @@
   "name": "push-ui",
   "version": "0.0.0",
   "scripts": {
-    "serve": "npm run dev",
-    "dev": "vite",
+    "serve": "cross-env --max_old_space_size=4096 vite",
+    "dev": "cross-env  --max_old_space_size=4096  vite",
     "build": "vite build && esno ./build/script/postBuild.ts"
   },
   "dependencies": {

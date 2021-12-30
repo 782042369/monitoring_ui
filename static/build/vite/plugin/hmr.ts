@@ -2,7 +2,7 @@
  * @Author: 杨宏旋
  * @Date: 2021-05-13 10:05:41
  * @LastEditors: 杨宏旋
- * @LastEditTime: 2021-07-19 12:21:53
+ * @LastEditTime: 2021-05-13 10:19:15
  * @Description:
  */
 import type { Plugin } from 'vite'

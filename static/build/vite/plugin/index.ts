@@ -1,8 +1,8 @@
 /*
  * @Author: 杨宏旋
  * @Date: 2021-05-13 10:05:41
- * @LastEditors: 杨宏旋
- * @LastEditTime: 2021-07-19 12:53:40
+ * @LastEditors: yanghongxuan
+ * @LastEditTime: 2021-12-30 16:50:03
  * @Description:
  */
 import type { Plugin } from 'vite'
@@ -30,7 +30,7 @@ export function createVitePlugins(viteEnv: ViteEnv, isBuild: boolean) {
     // VITE_USE_MOCK,
     // VITE_LEGACY,
     VITE_BUILD_COMPRESS,
-    VITE_BUILD_COMPRESS_DELETE_ORIGIN_FILE,
+    VITE_BUILD_COMPRESS_DELETE_ORIGIN_FILE
   } = viteEnv
 
   const vitePlugins: (Plugin | Plugin[])[] = [
@@ -45,10 +45,10 @@ export function createVitePlugins(viteEnv: ViteEnv, isBuild: boolean) {
           esModule: true,
           resolveStyle: (name) => {
             return `ant-design-vue/es/${name}/style/index`
-          },
-        },
-      ],
-    }),
+          }
+        }
+      ]
+    })
   ]
 
   // TODO
