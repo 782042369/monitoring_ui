@@ -2,12 +2,17 @@
  * @Author: 杨宏旋
  * @Date: 2021-05-07 14:51:42
  * @LastEditors: yanghongxuan
- * @LastEditTime: 2021-12-23 15:05:11
+ * @LastEditTime: 2021-12-30 17:46:39
  * @Description:
 -->
 <template>
   <div class="layout" flex="dir:top">
-    <div class="layout-herader">herader</div>
+    <div class="layout-header">
+      <a href="/test/index.html">测试页面</a>
+      <a href="/test/resourceError.html">资源加载测试页面</a>
+      <a href="/test/vue2error.html">vue2测试页面</a>
+      <a href="/test/xhrerror.html">请求测试页面</a>
+    </div>
     <div class="layout-main" flex>
       <Menu />
       <div class="layout-content">
@@ -23,7 +28,7 @@ import Menu from './Menu.vue'
 .layout {
   display: flex;
   height: 100vh;
-  &-herader {
+  &-header {
     height: 64px;
     background: #fff;
     border-bottom: solid 1px #f1f1f1;
