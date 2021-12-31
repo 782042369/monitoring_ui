@@ -1,8 +1,8 @@
 /*
  * @Author: 杨宏旋
  * @Date: 2021-05-07 11:08:45
- * @LastEditors: 杨宏旋
- * @LastEditTime: 2021-07-19 12:47:51
+ * @LastEditors: yanghongxuan
+ * @LastEditTime: 2021-12-31 15:40:24
  * @Description:
  */
 import type { UserConfig, ConfigEnv } from 'vite'
@@ -13,6 +13,7 @@ import { createProxy } from './build/vite/proxy'
 import { createVitePlugins } from './build/vite/plugin'
 import { OUTPUT_DIR } from './build/constant'
 import { generateModifyVars } from './build/generate/generateModifyVars'
+import copy from 'rollup-plugin-copy' //引入插件
 
 function pathResolve(dir: string) {
   return resolve(process.cwd(), '.', dir)
@@ -33,11 +34,22 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
   return {
     base: VITE_PUBLIC_PATH,
     plugins: createVitePlugins(viteEnv, isBuild),
+    // plugins: Object.assign(
+    //   createVitePlugins(viteEnv, isBuild),
+    //   copy({
+    //     targets: [
+    //       {
+    //         src: 'test',
+    //         dest: 'dist'
+    //       } //执行拷贝
+    //     ]
+    //   })
+    // ),
     server: {
       port: VITE_PORT,
       // Load proxy configuration from .env
       proxy: createProxy(VITE_PROXY),
-      host: true,
+      host: true
     },
     build: {
       target: 'es2015',
@@ -46,25 +58,39 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         compress: {
           keep_infinity: true,
           // Used to delete console in production environment
-          drop_console: VITE_DROP_CONSOLE,
-        },
+          drop_console: VITE_DROP_CONSOLE
+        }
       },
       // Turning off brotliSize display can slightly reduce packaging time
       brotliSize: false,
-      chunkSizeWarningLimit: 2000,
+      chunkSizeWarningLimit: 2000
     },
     resolve: {
       alias: {
-        '@': pathResolve('src') + '/',
-      },
+        '@': pathResolve('src') + '/'
+      }
     },
     css: {
       preprocessorOptions: {
         less: {
           modifyVars: generateModifyVars(),
-          javascriptEnabled: true,
-        },
+          javascriptEnabled: true
+        }
       },
-    },
+      postcss: {
+        plugins: [
+          {
+            postcssPlugin: 'internal:charset-removal',
+            AtRule: {
+              charset: (atRule) => {
+                if (atRule.name === 'charset') {
+                  atRule.remove()
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
   }
 }

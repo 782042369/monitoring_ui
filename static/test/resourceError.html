@@ -1,0 +1,45 @@
+<!--
+ * @Author: 杨宏旋
+ * @Date: 2021-07-19 18:15:30
+ * @LastEditors: yanghongxuan
+ * @LastEditTime: 2021-12-31 15:26:23
+ * @Description:
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>resourceError性能监控</title>
+    <script src="./index.min.js"></script>
+    <script>
+      new MonitorJS().init({
+        appID: 'zZQpe1627352687237',
+        reportUrl: 'http://1.116.160.128:7070/api', //上报错误地址
+        isPage: true
+      })
+    </script>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="a">
+      <div id="a1">
+        <img
+          src="https://camo1.githubusercontent.com/9f1292f0e9356dab9d9094bca540fd55b1981fa7/68747470733a2f2f75706c6f61642d696d616765732e6a69616e7368752e696f2f75706c6f61645f696d616765732f333239303032382d313534636437373333613061353438362e6a70673f696d6167654d6f6772322f6175746f2d6f7269656e742f7374726970253743696d61676556696577322f322f772f31323430"
+          alt=""
+        />
+      </div>
+      <img
+        src="https://camo.githubusercontent.com/9f1292f0e9356dab9d9094bca540fd55b1981fa7/68747470733a2f2f75706c6f61642d696d616765732e6a69616e7368752e696f2f75706c6f61645f696d616765732f333239303032382d313534636437373333613061353438362e6a70673f696d6167654d6f6772322f6175746f2d6f7269656e742f7374726970253743696d61676556696577322f322f772f31323430"
+        alt=""
+      />
+    </div>
+  </body>
+</html>
+<script>
+  setTimeout(() => {
+    location.href = location.href
+  }, 2500)
+</script>
+<script src="./1.js"></script>

@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "echarts": "^5.2.2",
+    "rollup-plugin-copy": "^3.4.0",
     "vue": "^3.1.5",
     "vue-router": "^4.0.10"
   },
