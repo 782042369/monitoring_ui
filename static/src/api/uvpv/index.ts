@@ -2,7 +2,7 @@
  * @Author: yanghongxuan
  * @Date: 2021-12-27 14:46:23
  * @LastEditors: yanghongxuan
- * @LastEditTime: 2021-12-29 18:09:06
+ * @LastEditTime: 2021-12-31 14:14:59
  * @Description:
  */
 import { defHttp } from '@/utils/axios'
@@ -10,7 +10,8 @@ import {
   DaysdatauvpvProps,
   WebPvUvIpSituationProps,
   WebListProps,
-  WebListType
+  WebListType,
+  WebListHistoryProps
 } from './model'
 
 export function getWebPvUvIpByDay(params) {
@@ -41,6 +42,13 @@ export function getPvUvIpOne(params) {
     time: number
   }>({
     url: '/api/getPvUvIpOne',
+    params
+  })
+}
+export function getHistoryPvUvIplist(params) {
+  // 获取历史概况
+  return defHttp.get<WebListHistoryProps>({
+    url: '/api/getHistoryPvUvIplist',
     params
   })
 }

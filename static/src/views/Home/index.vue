@@ -2,7 +2,7 @@
  * @Author: yanghongxuan
  * @Date: 2021-12-23 10:57:40
  * @LastEditors: yanghongxuan
- * @LastEditTime: 2021-12-30 10:21:57
+ * @LastEditTime: 2021-12-31 14:15:09
  * @Description:
 -->
 <template>
@@ -156,10 +156,11 @@
   </div>
 </template>
 <script lang='ts' setup>
-import { getWebPvUvIpByDay, getWebPvUvIpSituation, getPvUvIpList, getPvUvIpOne } from '@/api/uvpv'
+import { getWebPvUvIpByDay, getWebPvUvIpSituation, getPvUvIpList, getPvUvIpOne, getHistoryPvUvIplist } from '@/api/uvpv'
 import { onMounted, reactive, nextTick } from 'vue'
 import dayjs from 'dayjs'
 import * as echarts from 'echarts'
+import type { DaysdatauvpvProps, WebListHistoryProps } from '@/api/uvpv/model'
 
 const STATE = reactive<{
   lable: number;
@@ -167,13 +168,7 @@ const STATE = reactive<{
   endTime: string;
   appId: string;
   datalist: never[];
-  today: {
-    pv: number
-    uv: number
-    ip: number
-    ajax: number
-    flow: string
-  };
+  today: DaysdatauvpvProps;
   surveyone: {
     app_id?: string
     pv: number
@@ -186,16 +181,7 @@ const STATE = reactive<{
   };
   errText: string;
   errTextleft: string;
-  historylist: {
-    create_time: string
-    pv: number
-    uv: number
-    ip: number
-    ajax: number
-    flow: string
-    bounce: string
-    depth: number
-  }[];
+  historylist: WebListHistoryProps;
   timebetween: number;
   searchbetween: number;
   xAxislist: string[],
@@ -330,6 +316,14 @@ const handleGetWebPvUvIpSituation = async () => {
   STATE.timebetween = data.time / 1000 / 60
   STATE.searchbetween = data.time * 30 / 1000 / 60 / 60;
 }
+// 获取历史概况
+const handleGetHistoryPvUvIplist = async () => {
+  const data = await getHistoryPvUvIplist({
+    appId: 'zZQpe1627352687237',
+  })
+  STATE.historylist = data
+}
+
 // 切换label
 const checkoutLabel = (lable: number) => {
   if (lable === STATE.lable) return;
@@ -340,7 +334,7 @@ const checkoutLabel = (lable: number) => {
   if (lable == 1) {
     clearInterval(STATE.timer)
     handleGetWebPvUvIpByDay();
-    // getHistoryPvUvIplist();
+    handleGetHistoryPvUvIplist();
   } else if (lable == 2) {
     handleGetPvUvIpList();
   };
