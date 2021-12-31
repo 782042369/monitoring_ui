@@ -2,7 +2,7 @@
  * @Author: yanghongxuan
  * @Date: 2021-12-23 10:57:40
  * @LastEditors: yanghongxuan
- * @LastEditTime: 2021-12-31 14:15:09
+ * @LastEditTime: 2021-12-31 15:08:58
  * @Description:
 -->
 <template>
@@ -84,7 +84,7 @@
       </div>
       <div v-if="STATE.historylist.length">
         <div class="com_block mt20" v-for="(item,index) in STATE.historylist" :key="index">
-          <h1 class="com_h2 mb20">{{ item.create_time }}</h1>
+          <h1 class="com_h2 mb20">{{ dayjs(item.created_time).format('YYYY-MM-DD') }}</h1>
           <div class="survey">
             <div class="com pv">
               <span>PV:</span>
@@ -112,7 +112,7 @@
             </div>
             <div class="com ip">
               <span>流量:</span>
-              {{ item.flow }}
+              {{ converUnit(item.flow) }}
             </div>
           </div>
         </div>
@@ -133,7 +133,7 @@
         <div class="tipscolor mt10" v-if="STATE.errText">{{ STATE.errText }}</div>
       </div>
       <div class="com_block mt20">
-        <h1 class="com_h2 mb20">实时访问AJAX</h1>
+        <h1 class="com_h2 mb20">实时访问请求</h1>
         <div id="pvuvip_ajax" style="height:400px"></div>
       </div>
       <div class="com_block mt20">
@@ -161,6 +161,7 @@ import { onMounted, reactive, nextTick } from 'vue'
 import dayjs from 'dayjs'
 import * as echarts from 'echarts'
 import type { DaysdatauvpvProps, WebListHistoryProps } from '@/api/uvpv/model'
+import { converUnit } from '@/utils'
 
 const STATE = reactive<{
   lable: number;
@@ -449,7 +450,9 @@ const handleDraw = (type: string, xAxislist: string[], itemlist: number[]) => {
 onMounted(() => {
   handleGetWebPvUvIpByDay();
   handleGetWebPvUvIpSituation()
+  handleGetHistoryPvUvIplist();
 })
+
 </script>
 <style scoped lang='scss'>
 .com_block {

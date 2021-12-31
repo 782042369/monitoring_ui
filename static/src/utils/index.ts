@@ -2,7 +2,7 @@
  * @Author: 杨宏旋
  * @Date: 2021-05-13 14:44:32
  * @LastEditors: yanghongxuan
- * @LastEditTime: 2021-12-29 14:56:04
+ * @LastEditTime: 2021-12-31 15:04:12
  * @Description:
  */
 import type { RouteLocationNormalized, RouteRecordNormalized } from 'vue-router'
@@ -92,4 +92,13 @@ export function getRawRoute(
         }))
       : undefined) as RouteRecordNormalized[]
   }
+}
+export function converUnit(bytes: number): string {
+  if (bytes === 0) {
+    return '0 B'
+  }
+  const k = 1024, // or 1024
+    sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+    i = Math.floor(Math.log(bytes) / Math.log(k))
+  return `${(bytes / Math.pow(k, i)).toPrecision(3)} ${sizes[i < 0 ? 0 : i]}`
 }

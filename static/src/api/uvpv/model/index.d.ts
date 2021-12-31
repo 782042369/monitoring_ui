@@ -2,7 +2,7 @@
  * @Author: yanghongxuan
  * @Date: 2021-12-28 09:43:17
  * @LastEditors: yanghongxuan
- * @LastEditTime: 2021-12-31 14:13:51
+ * @LastEditTime: 2021-12-31 15:05:55
  * @Description:
  */
 export interface DaysdatauvpvProps {
@@ -29,12 +29,12 @@ export interface WebListProps {
   time: number
 }
 export type WebListHistoryType = {
-  create_time: string
+  created_time: string
   pv: number
   uv: number
   ip: number
   ajax: number
-  flow: string
+  flow: number
   bounce: string
   depth: number
 }
